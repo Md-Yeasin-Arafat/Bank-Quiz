@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BB Assistant Director (ICT) — Exam 07.02.2025 Quiz</title>
+<style>
+  :root{
+    --bg:#0f1720; --card:#16212e; --accent:#4f9dff; --accent2:#22c55e;
+    --bad:#ef4444; --text:#e6edf3; --muted:#8b98a5; --border:#25313f;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:linear-gradient(160deg,#0b1119,#141d29 60%,#0f1720);
+    color:var(--text); min-height:100vh; display:flex; justify-content:center; padding:32px 16px;
+  }
+  .app{width:100%; max-width:780px;}
+  header{
+    position:sticky; top:0; z-index:10; background:linear-gradient(160deg,#0b1119,#121b26);
+    padding:14px 18px; border-radius:14px; border:1px solid var(--border);
+    display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.4);
+  }
+  header .title h1{font-size:1.05rem; margin:0 0 2px;}
+  header .title p{color:var(--muted); margin:0; font-size:0.78rem;}
+  .timer{
+    display:flex; align-items:center; gap:8px; background:#0d151f; border:1px solid var(--border);
+    padding:8px 14px; border-radius:10px; font-variant-numeric:tabular-nums;
+  }
+  .timer .dot{width:8px; height:8px; border-radius:50%; background:var(--accent2); animation:pulse 1.4s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+  .timer span{font-weight:700; font-size:1rem;}
+  .progress-summary{font-size:0.78rem; color:var(--muted); margin-bottom:16px; text-align:center;}
+  .marking-note{font-size:0.72rem; color:var(--muted); text-align:center; margin-top:-10px; margin-bottom:16px;}
+  .qcard{
+    background:var(--card); border:1px solid var(--border); border-radius:14px;
+    padding:20px; margin-bottom:16px; scroll-margin-top:90px;
+  }
+  .qhead{display:flex; gap:10px; align-items:baseline; margin-bottom:10px;}
+  .qhead .num{color:var(--accent); font-weight:700; font-size:0.95rem; min-width:28px;}
+  .question{font-size:1rem; line-height:1.5; white-space:pre-wrap;}
+  .codeblock{
+    display:block; background:#0a1017; border:1px solid var(--border); border-radius:8px;
+    padding:12px; font-family:'SF Mono',Consolas,monospace; font-size:0.83rem; white-space:pre;
+    overflow-x:auto; margin:10px 0; color:#9fd0ff;
+  }
+  .options{display:flex; flex-direction:column; gap:8px; margin-top:12px;}
+  .opt{
+    text-align:left; padding:11px 14px; border-radius:10px; border:1px solid var(--border);
+    background:#111b26; color:var(--text); font-size:0.92rem; cursor:pointer; transition:all .15s ease;
+    display:flex; gap:10px; align-items:flex-start;
+  }
+  .opt:hover{border-color:var(--accent); background:#132234;}
+  .opt .lbl{color:var(--accent); font-weight:600; min-width:18px;}
+  .opt.selected{border-color:var(--accent); background:rgba(79,157,255,0.14);}
+  /* post-submit states */
+  .qcard.graded .opt{cursor:default; pointer-events:none;}
+  .qcard.graded .opt.correct{border-color:var(--accent2); background:rgba(34,197,94,0.14);}
+  .qcard.graded .opt.wrong{border-color:var(--bad); background:rgba(239,68,68,0.14);}
+  .note{
+    margin-top:12px; font-size:0.83rem; color:var(--muted); background:#0d151f;
+    border-left:3px solid var(--accent); padding:10px 12px; border-radius:6px; display:none;
+    white-space:pre-wrap;
+  }
+  .qcard.graded.wrong-card .note{display:block; border-left-color:var(--bad);}
+  .qcard.graded.skip-card .note{display:block;}
+  .badge{
+    margin-left:auto; font-size:0.72rem; padding:3px 9px; border-radius:20px; font-weight:700;
+    display:none; white-space:nowrap;
+  }
+  .qcard.graded .badge{display:inline-block;}
+  .badge.ok{background:rgba(34,197,94,0.18); color:#7be89b;}
+  .badge.no{background:rgba(239,68,68,0.18); color:#f29b9b;}
+  .badge.skip{background:rgba(139,152,165,0.18); color:var(--muted);}
+  .marks-tag{font-size:0.72rem; color:var(--muted); margin-left:8px;}
+
+  .submit-bar{
+    position:sticky; bottom:16px; display:flex; justify-content:center; margin-top:24px; z-index:9;
+  }
+  button.submitBtn{
+    background:var(--accent); color:#06121f; border:none; padding:14px 36px; border-radius:12px;
+    font-weight:700; font-size:1rem; cursor:pointer; box-shadow:0 8px 24px rgba(79,157,255,0.35);
+    transition:filter .15s ease;
+  }
+  button.submitBtn:hover{filter:brightness(1.08);}
+  button.submitBtn:disabled{opacity:0.5; cursor:not-allowed;}
+
+  .result-panel{
+    background:var(--card); border:1px solid var(--border); border-radius:16px;
+    padding:26px; text-align:center; margin-bottom:20px; box-shadow:0 8px 30px rgba(0,0,0,0.35);
+  }
+  .result-panel .big{font-size:2.6rem; font-weight:700; color:var(--accent); margin:8px 0;}
+  .result-panel .stats{
+    display:flex; justify-content:center; gap:26px; margin-top:16px; flex-wrap:wrap;
+  }
+  .stat{text-align:center;}
+  .stat .n{font-size:1.3rem; font-weight:700;}
+  .stat .l{font-size:0.75rem; color:var(--muted);}
+  .stat.ok .n{color:var(--accent2);}
+  .stat.no .n{color:var(--bad);}
+  .stat.skip .n{color:var(--muted);}
+  .restart{
+    margin-top:20px; background:var(--accent); color:#06121f; border:none; padding:12px 28px;
+    border-radius:10px; font-weight:600; cursor:pointer; font-size:0.95rem;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="title">
+      <h1>Bangladesh Bank — Assistant Director (ICT)</h1>
+      <p>Exam held 07.02.2025 (DU) · Full MCQ Set · 45 of 50 Questions</p>
+    </div>
+    <div class="timer"><div class="dot" id="timerDot"></div><span id="timerDisplay">00:00</span></div>
+  </header>
+
+  <div class="progress-summary" id="progressSummary">0 of 45 answered</div>
+  <div class="marking-note">Marking scheme: +1 for each correct answer, −0.25 for each incorrect answer, 0 for skipped</div>
+
+  <div id="resultPanel"></div>
+  <div id="quizList"></div>
+
+  <div class="submit-bar" id="submitBar">
+    <button class="submitBtn" id="submitBtn">Submit Quiz</button>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+{q:"Find Output:", code:`int fun(int *p) {
+    *p = *p + 10;
+    return *p;
+}
+int main() {
+    int x = 5;
+    cout << fun(&x);
+    return 0;
+}`, options:["15","10","25","5"], answer:0,
+ note:"fun() receives the address of x, so *p refers to x itself. *p = *p + 10 changes x to 5+10=15, and the function returns 15."},
+
+{q:"Find Output:", code:`int main() {
+    int x=3, y=2;
+    if (x==3)
+        y=2;
+    else
+        y=3;
+    cout<<x<<" "<<y<<endl;
+    return 0;
+}`, options:["3 3","3 2","2 3","3 1"], answer:1,
+ note:"Since x==3 is true, y is set to 2. x stays 3. The output is 'x y' = '3 2'."},
+
+{q:"Which one is a Universal logic gate?", options:["NAND","AND","OR","NOT"], answer:0,
+ note:"NAND (and NOR) are universal gates — any other logic gate (AND, OR, NOT, XOR, etc.) can be built using only NAND gates."},
+
+{q:"Which data structure is preferred for Priority Queue?", options:["Heap Tree","Graph","Stack","Table"], answer:0,
+ note:"A heap tree efficiently supports insertion and extraction of the highest/lowest priority element in O(log n) time, which is why it's the standard structure for priority queues."},
+
+{q:"What is the work of a Rectifier?", options:["Converts DC to AC","Converts AC to DC","Stores Electrical Energy","Increases Voltage"], answer:1,
+ note:"A rectifier converts alternating current (AC) into direct current (DC) using diodes that allow current to flow in only one direction."},
+
+{q:"A transfers balance to B, but B does not receive it. Which ACID property is responsible for ensuring the transaction rolls back?", options:["Atomicity","Consistency","Isolation","Durability"], answer:0,
+ note:"Atomicity ensures a transaction is all-or-nothing — if the credit to B fails, the debit from A is rolled back too."},
+
+{q:"What is the 2's complement of (65)₁₆?", options:["10011011","10011010","00011011","10011100"], answer:0,
+ note:"(65)₁₆ = 01100101 in binary. Invert all bits → 10011010, then add 1 → 10011011, which is the 2's complement."},
+
+{q:"What does inductance depend on?", options:["Number of turns in the coil","Permeability of the core material","Cross-sectional area of the coil","All of the above"], answer:3,
+ note:"Inductance (L) depends on the number of turns, the permeability of the core, and the cross-sectional area — all three factors together determine it."},
+
+{q:"A Zener diode is a ___ conducting device.", options:["Unidirectional","Bidirectional","Multidirectional","Tri-directional"], answer:1,
+ note:"A Zener diode can conduct in reverse direction once a specific 'Zener voltage' is reached, unlike a normal diode which only conducts forward."},
+
+{q:"Which of the following does NOT achieve encapsulation?", options:["Using private access specifier","Using classes in object-oriented programming","Using getter and setter methods","Using global variables"], answer:3,
+ note:"Global variables are accessible from anywhere in the program, so they expose data instead of hiding it — the opposite of encapsulation."},
+
+{q:"Which algorithm is used in email security?", options:["AES","RSA","SHA","All of the above"], answer:3,
+ note:"AES encrypts content, RSA handles public-key encryption (PGP/S-MIME), and SHA ensures integrity via digital signatures — all three are used together in email security."},
+
+{q:"In the given circuit, resistors of 10Ω, 20Ω, and 30Ω are connected in parallel, and a voltage source of 60V is applied across them. What is the equivalent current flowing from the voltage source?", options:["8 A","9 A","11 A","12 A"], answer:2,
+ note:"1/R = 1/10 + 1/20 + 1/30 = 11/60, so R ≈ 5.45Ω. Current I = V/R = 60 ÷ (60/11) = 11 A."},
+
+{q:"A process needs I/O operations, it switches to ___", options:["Ready","Running","Waiting (Blocked)","Terminated"], answer:2,
+ note:"When a process requests I/O, the CPU is freed for other processes and the requesting process moves to the Waiting/Blocked state until the I/O completes."},
+
+{q:"Which of the following is not a web server?", options:["Apache Tomcat","PHP","Jetty","Tornado"], answer:1,
+ note:"PHP is a server-side scripting language, not a web server itself. Apache Tomcat, Jetty, and Tornado are all actual web/application servers."},
+
+{q:"Which clause is executed first in an SQL query?", options:["WHERE","SELECT","FROM","ORDER BY"], answer:2,
+ note:"SQL's logical execution order is FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY, so FROM (identifying the source table) runs first."},
+
+{q:"What should be true for a Zener Diode?", options:["Reverse bias for amplifying","Operates in forward bias only","Works in reverse breakdown region","Used for rectification"], answer:2,
+ note:"A Zener diode is deliberately operated in its reverse breakdown region to provide a stable reference voltage, used commonly in voltage regulation."},
+
+{q:"Which of the following is a DML (Data Manipulation Language) command?", options:["CREATE","DELETE","DROP","ALTER"], answer:1,
+ note:"DML commands modify data (INSERT, UPDATE, DELETE, SELECT). DDL commands modify structure (CREATE, ALTER, DROP). DELETE is DML because it removes records without changing table structure."},
+
+{q:"What is the worst case time complexity of inserting n elements into an empty linked list, if the linked list needs to be maintained in sorted order?", options:["Θ(n)","Θ(n log n)","Θ(n²)","Θ(1)"], answer:2,
+ note:"To keep the list sorted, each new element may need to be compared against all previously inserted elements to find its position, giving 1+2+...+n ≈ Θ(n²) in the worst case."},
+
+{q:"Which one of the following is an application of Stack Data Structure?", options:["Managing function calls","The stock span problem","Arithmetic expression evaluation","All of the above"], answer:3,
+ note:"A stack is LIFO — used for the call stack (function calls), stock span problem, and infix-to-postfix / postfix evaluation."},
+
+{q:"What is the best way to implement priority queue?", options:["Array","Linked List","Heap","Stack"], answer:2,
+ note:"A binary heap gives O(log n) insertion/deletion and O(1) peek, making it the most efficient structure for a priority queue."},
+
+{q:"What kind of encryption is used for securing emails in transit?", options:["Symmetric Encryption","Asymmetric Encryption","TLS (Transport Layer Security)","Hashing"], answer:2,
+ note:"TLS secures emails while they travel between mail servers and clients, preventing interception during transmission."},
+
+{q:"Digital Signature uses which algorithm?", options:["AES","RSA","DES","Diffie-Hellman"], answer:1,
+ note:"RSA generates a public-private key pair: the private key signs the message, and the public key verifies the signature."},
+
+{q:"What does HTTP Status Code 500 indicate?", options:["Bad Request","Unauthorized Access","Internal Server Error","Not Found"], answer:2,
+ note:"HTTP 500 is a generic server-side error meaning the server hit an unexpected condition while fulfilling the request."},
+
+{q:"Which one make data access from a database faster?", options:["Indexing","Normalization","Denormalization","All of the above"], answer:0,
+ note:"Indexing creates a structure that speeds up search/retrieval, reducing full table scans for WHERE, JOIN, and ORDER BY operations."},
+
+{q:"Priority Scheduling (Non-Preemptive) with No Arrival Time. Consider the following set of processes with their burst times and priorities. Using Non-Preemptive Priority Scheduling (lower number = higher priority), what is the Average Turnaround Time (TAT)?",
+ code:`Process | Burst Time (BT) | Priority
+P1      | 10               | 3
+P2      | 1                | 1
+P3      | 2                | 4
+P4      | 1                | 5
+P5      | 5                | 2`, options:["10","8.6","12","9.2"], answer:2,
+ note:"Execution order by priority (1=highest): P2→P5→P1→P3→P4. Completion times: P2=1, P5=6, P1=16, P3=18, P4=19. With zero arrival time, TAT = completion time. Average = (1+6+16+18+19)/5 = 12."},
+
+{q:"What is the major drawback of the Waterfall Model?", options:["It is difficult to manage","It requires too many resources","It is inflexible and not suitable for changing requirements","It lacks proper documentation"], answer:2,
+ note:"Once a phase is completed it's hard to go back, and the model doesn't support changing requirements mid-development — it only works well when requirements are clear and fixed from the start."},
+
+{q:"Which of the following is a command of Data Definition Language (DDL)?", options:["SELECT","INSERT","UPDATE","CREATE"], answer:3,
+ note:"DDL commands define or modify database structure: CREATE, ALTER, DROP, TRUNCATE, RENAME."},
+
+{q:"Which connect the two Seas in Suez Canal?", options:["Arabian Sea and Mediterranean Sea","Mediterranean Sea and Red Sea","Persian Gulf and Black Sea","Black Sea and Arabian Sea"], answer:1,
+ note:"The Suez Canal is an artificial waterway in Egypt connecting the Mediterranean Sea to the Red Sea, allowing ships to avoid sailing around Africa."},
+
+{q:"Who is the first ICC ODI Men's World Cup winning captain?", options:["Clive Lloyd","Kapil Dev","Alan Border","Steve Waugh"], answer:0,
+ note:"Clive Lloyd captained the West Indies to victory in the first-ever Cricket World Cup in 1975."},
+
+{q:"Who won the Nobel Peace Prize in 2024?", options:["David Baker","John Jumper","Nihon Hidankyo","Gary Ruvkun"], answer:2,
+ note:"Nihon Hidankyo, a Japanese organization of atomic bomb survivors (hibakusha), won the 2024 Nobel Peace Prize for its advocacy against nuclear weapons."},
+
+{q:"The highest peak in Bangladesh is —", options:["Saka Haphong","Bijoy Tajingdong","Dumlong","Keokradong"], answer:0,
+ note:"Saka Haphong, located in the Bandarban district, is now officially recognized as the highest peak in Bangladesh based on GPS survey measurements."},
+
+{q:"Strasbourg belongs to which country?", options:["France","Germany","Canada","Russia"], answer:0,
+ note:"Strasbourg is a city in northeastern France, notably home to the seat of the European Parliament."},
+
+{q:"A pipe can fill a tank in 4 hours, and another pipe can fill it in 6 hours. How much time will they take to fill the tank together?", options:["40 hours","4.5 hours","2.4 hours","5 hours"], answer:2,
+ note:"Combined rate = 1/4 + 1/6 = 5/12 of the tank per hour, so time together = 12/5 = 2.4 hours."},
+
+{q:"A went 5 meters to the north, then 3 meters to the east, and then 2 meters to the south. What is the distance from A's starting point to his final position?", options:["4.24 meters","5.24 meters","3.24 meters","4 meters"], answer:0,
+ note:"Net north-south displacement = 5−2 = 3m, east displacement = 3m. Straight-line distance = √(3²+3²) = √18 ≈ 4.24 meters."},
+
+{q:"Mr. X uses 30% of his salary for one expense, 20% for another, and 10% for another. His remaining amount is 12,000 Taka. What is his total salary?", options:["25,000 TK","30,000 TK","35,000 TK","3,000 TK"], answer:1,
+ note:"Total spent = 30%+20%+10% = 60%, so remaining 40% = 12,000 TK. Total salary = 12,000 ÷ 0.40 = 30,000 TK."},
+
+{q:"The father's age is 36 and the son's age is 16. How many years ago was the father's age three times the son's age?", options:["6 years ago","36 years ago","12 years ago","4 years ago"], answer:0,
+ note:"Let x years ago: 36−x = 3(16−x) → 36−x = 48−3x → 2x = 12 → x = 6 years ago."},
+
+{q:"There are 8 balls, and one of them is heavier than the other 7, which are of the same weight. How many weighings are required to guarantee finding the heavier ball?", options:["1","2","3","4"], answer:2,
+ note:"Following the answer key's stepwise weighing approach (splitting the balls and narrowing down the heavier group in stages), 3 weighings guarantee identifying the odd ball."},
+
+{q:"Integration testing is the process of testing the ___ between two software units or modules.", options:["Performance","Functionality","Interface","Security"], answer:2,
+ note:"Integration testing checks the interface between two or more individually unit-tested modules, ensuring data and communication flow correctly at their connection points."},
+
+{q:"Which of the following operators should be preferred to overload as a global function rather than a member method?", options:["Postfix ++","Comparison Operator","Insertion Operator <<","Prefix ++"], answer:2,
+ note:"Operators like << and >> must keep the stream (ostream/istream) as the left operand, so they're overloaded as global functions, e.g. std::cout << obj;"},
+
+{q:"What are the advantages of Linear Search over Binary Search?", options:["The array is ordered","Less number of comparisons","Less time and space complexity","Linear search can be used irrespective of whether the array is sorted or not"], answer:3,
+ note:"Binary search is faster but requires sorted data. Linear search works on any list — sorted or unsorted — without preprocessing."},
+
+{q:"Integration testing is the process of testing the ___ between two software units or modules. (repeated in source)", options:["Performance","Functionality","Interface","Security"], answer:2,
+ note:"This question appears twice in the original question bank. Integration testing checks the interface between modules that have already been unit tested."},
+
+{q:"Digital signature uses which algorithm for encryption?", options:["Symmetric Key Algorithm","Asymmetric Key Algorithm","Hashing Algorithm only","Stream Cipher"], answer:1,
+ note:"Digital signatures use asymmetric cryptography (public-key cryptography): the private key creates the signature, and the public key verifies it."},
+
+{q:"Which device is needed to convert AC to DC?", options:["Transformer","Rectifier","Inverter","Amplifier"], answer:1,
+ note:"A rectifier converts AC (Alternating Current) to DC (Direct Current) using diodes that allow current to flow in only one direction."},
+
+{q:"What is Docker Hub and Docker?", options:["Docker is a container platform, and Docker Hub is a cloud repository for Docker images","Docker is a virtual machine software, and Docker Hub is a database","Docker is a programming language, and Docker Hub is a code editor","Docker is a firewall, and Docker Hub is a security tool"], answer:0,
+ note:"Docker is a platform for building, running, and packaging applications in lightweight containers. Docker Hub is the cloud-based registry where those container images are stored and shared."},
+
+{q:"An IP address is given 192.168.3.0, needing 254 usable hosts. What is the CIDR value and subnet mask?", options:["255.255.255.0","255.255.255.128","255.255.255.192","255.255.254.0"], answer:0,
+ note:"Host bits = 32 − 24 = 8 bits → Total hosts = 2⁸ = 256, Usable hosts = 256 − 2 = 254 → /24 → 255.255.255.0"},
+];
+
+const CORRECT_MARKS = 1;
+const NEGATIVE_MARKS = 0.25;
+
+const userAnswers = new Array(QUESTIONS.length).fill(null);
+let submitted = false;
+let seconds = 0;
+let timerInterval = null;
+
+function formatTime(s){
+  const m = Math.floor(s/60).toString().padStart(2,'0');
+  const sec = (s%60).toString().padStart(2,'0');
+  return `${m}:${sec}`;
+}
+
+function startTimer(){
+  timerInterval = setInterval(() => {
+    seconds++;
+    document.getElementById('timerDisplay').textContent = formatTime(seconds);
+  }, 1000);
+}
+
+function stopTimer(){
+  clearInterval(timerInterval);
+  document.getElementById('timerDot').style.background = 'var(--muted)';
+  document.getElementById('timerDot').style.animation = 'none';
+}
+
+function updateProgressSummary(){
+  const answered = userAnswers.filter(a => a !== null).length;
+  document.getElementById('progressSummary').textContent = `${answered} of ${QUESTIONS.length} answered`;
+}
+
+function renderQuiz(){
+  const list = document.getElementById('quizList');
+  list.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  QUESTIONS.forEach((item, qi) => {
+    const card = document.createElement('div');
+    card.className = 'qcard';
+    card.id = `q-${qi}`;
+    card.innerHTML = `
+      <div class="qhead">
+        <span class="num">Q${qi+1}.</span>
+        <span class="question">${item.q}</span>
+        <span class="badge" id="badge-${qi}"></span>
+      </div>
+      ${item.code ? `<div class="codeblock">${item.code.replace(/</g,'&lt;')}</div>` : ''}
+      <div class="options" id="opts-${qi}"></div>
+      <div class="note" id="note-${qi}">${item.note || ''}</div>
+    `;
+    const optsDiv = card.querySelector(`#opts-${qi}`);
+    item.options.forEach((opt, oi) => {
+      const btn = document.createElement('div');
+      btn.className = 'opt';
+      btn.dataset.qi = qi;
+      btn.dataset.oi = oi;
+      btn.innerHTML = `<span class="lbl">${letters[oi]}</span><span>${opt}</span>`;
+      btn.onclick = () => selectOption(qi, oi);
+      optsDiv.appendChild(btn);
+    });
+    list.appendChild(card);
+  });
+}
+
+function selectOption(qi, oi){
+  if (submitted) return;
+  userAnswers[qi] = oi;
+  const card = document.getElementById(`q-${qi}`);
+  card.querySelectorAll('.opt').forEach(o => {
+    o.classList.toggle('selected', parseInt(o.dataset.oi) === oi);
+  });
+  updateProgressSummary();
+}
+
+function gradeQuiz(){
+  let correct = 0, wrong = 0, skipped = 0, totalMarks = 0;
+  QUESTIONS.forEach((item, qi) => {
+    const card = document.getElementById(`q-${qi}`);
+    card.classList.add('graded');
+    const userAns = userAnswers[qi];
+    const badge = document.getElementById(`badge-${qi}`);
+    card.querySelectorAll('.opt').forEach(o => {
+      const oi = parseInt(o.dataset.oi);
+      if (oi === item.answer) o.classList.add('correct');
+      else if (oi === userAns) o.classList.add('wrong');
+    });
+    if (userAns === null){
+      skipped++;
+      card.classList.add('skip-card');
+      badge.textContent = '0 · Skipped';
+      badge.className = 'badge skip';
+    } else if (userAns === item.answer){
+      correct++;
+      totalMarks += CORRECT_MARKS;
+      badge.textContent = `+${CORRECT_MARKS} · Correct`;
+      badge.className = 'badge ok';
+    } else {
+      wrong++;
+      totalMarks -= NEGATIVE_MARKS;
+      card.classList.add('wrong-card');
+      badge.textContent = `−${NEGATIVE_MARKS} · Incorrect`;
+      badge.className = 'badge no';
+    }
+  });
+  return {correct, wrong, skipped, totalMarks};
+}
+
+function renderResultPanel({correct, wrong, skipped, totalMarks}){
+  const maxMarks = QUESTIONS.length * CORRECT_MARKS;
+  const pct = Math.round((correct/QUESTIONS.length)*100);
+  const panel = document.getElementById('resultPanel');
+  panel.innerHTML = `
+    <div class="result-panel">
+      <div style="color:var(--muted); font-size:0.85rem;">Bangladesh Bank AD (ICT) — Exam 07.02.2025</div>
+      <div class="big">${totalMarks.toFixed(2)} / ${maxMarks}</div>
+      <div style="color:var(--muted);">${correct} correct out of ${QUESTIONS.length} (${pct}%) · completed in ${formatTime(seconds)}</div>
+      <div class="stats">
+        <div class="stat ok"><div class="n">${correct}</div><div class="l">Correct (+${CORRECT_MARKS} each)</div></div>
+        <div class="stat no"><div class="n">${wrong}</div><div class="l">Incorrect (−${NEGATIVE_MARKS} each)</div></div>
+        <div class="stat skip"><div class="n">${skipped}</div><div class="l">Skipped (0)</div></div>
+      </div>
+      <button class="restart" id="restartBtn">Retake Quiz</button>
+    </div>
+  `;
+  document.getElementById('restartBtn').onclick = resetQuiz;
+}
+
+function resetQuiz(){
+  submitted = false;
+  for (let i=0;i<userAnswers.length;i++) userAnswers[i] = null;
+  seconds = 0;
+  document.getElementById('timerDisplay').textContent = '00:00';
+  document.getElementById('timerDot').style.background = 'var(--accent2)';
+  document.getElementById('timerDot').style.animation = 'pulse 1.4s infinite';
+  document.getElementById('resultPanel').innerHTML = '';
+  document.getElementById('submitBar').style.display = 'flex';
+  document.getElementById('submitBtn').disabled = false;
+  renderQuiz();
+  updateProgressSummary();
+  startTimer();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+document.getElementById('submitBtn').onclick = () => {
+  if (submitted) return;
+  submitted = true;
+  stopTimer();
+  const results = gradeQuiz();
+  renderResultPanel(results);
+  document.getElementById('submitBar').style.display = 'none';
+  window.scrollTo({top:0, behavior:'smooth'});
+};
+
+renderQuiz();
+updateProgressSummary();
+startTimer();
+</script>
+</body>
+</html>
