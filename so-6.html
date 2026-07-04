@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Combined Bank Senior Officer (IT) — Exam 17.05.2024 Quiz</title>
+<style>
+  :root{
+    --bg:#0f1720; --card:#16212e; --accent:#4f9dff; --accent2:#22c55e;
+    --bad:#ef4444; --text:#e6edf3; --muted:#8b98a5; --border:#25313f;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:linear-gradient(160deg,#0b1119,#141d29 60%,#0f1720);
+    color:var(--text); min-height:100vh; display:flex; justify-content:center; padding:32px 16px;
+  }
+  .app{width:100%; max-width:780px;}
+  header{
+    position:sticky; top:0; z-index:10; background:linear-gradient(160deg,#0b1119,#121b26);
+    padding:14px 18px; border-radius:14px; border:1px solid var(--border);
+    display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.4);
+  }
+  header .title h1{font-size:1.05rem; margin:0 0 2px;}
+  header .title p{color:var(--muted); margin:0; font-size:0.78rem;}
+  .timer{
+    display:flex; align-items:center; gap:8px; background:#0d151f; border:1px solid var(--border);
+    padding:8px 14px; border-radius:10px; font-variant-numeric:tabular-nums;
+  }
+  .timer .dot{width:8px; height:8px; border-radius:50%; background:var(--accent2); animation:pulse 1.4s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+  .timer span{font-weight:700; font-size:1rem;}
+  .progress-summary{font-size:0.78rem; color:var(--muted); margin-bottom:16px; text-align:center;}
+  .marking-note{font-size:0.72rem; color:var(--muted); text-align:center; margin-top:-10px; margin-bottom:16px;}
+  .qcard{
+    background:var(--card); border:1px solid var(--border); border-radius:14px;
+    padding:20px; margin-bottom:16px; scroll-margin-top:90px;
+  }
+  .qhead{display:flex; gap:10px; align-items:baseline; margin-bottom:10px;}
+  .qhead .num{color:var(--accent); font-weight:700; font-size:0.95rem; min-width:28px;}
+  .question{font-size:1rem; line-height:1.5; white-space:pre-wrap;}
+  .codeblock{
+    display:block; background:#0a1017; border:1px solid var(--border); border-radius:8px;
+    padding:12px; font-family:'SF Mono',Consolas,monospace; font-size:0.83rem; white-space:pre;
+    overflow-x:auto; margin:10px 0; color:#9fd0ff;
+  }
+  .options{display:flex; flex-direction:column; gap:8px; margin-top:12px;}
+  .opt{
+    text-align:left; padding:11px 14px; border-radius:10px; border:1px solid var(--border);
+    background:#111b26; color:var(--text); font-size:0.92rem; cursor:pointer; transition:all .15s ease;
+    display:flex; gap:10px; align-items:flex-start;
+  }
+  .opt:hover{border-color:var(--accent); background:#132234;}
+  .opt .lbl{color:var(--accent); font-weight:600; min-width:18px;}
+  .opt.selected{border-color:var(--accent); background:rgba(79,157,255,0.14);}
+  .qcard.graded .opt{cursor:default; pointer-events:none;}
+  .qcard.graded .opt.correct{border-color:var(--accent2); background:rgba(34,197,94,0.14);}
+  .qcard.graded .opt.wrong{border-color:var(--bad); background:rgba(239,68,68,0.14);}
+  .note{
+    margin-top:12px; font-size:0.83rem; color:var(--muted); background:#0d151f;
+    border-left:3px solid var(--accent); padding:10px 12px; border-radius:6px; display:none;
+    white-space:pre-wrap;
+  }
+  .qcard.graded.wrong-card .note{display:block; border-left-color:var(--bad);}
+  .qcard.graded.skip-card .note{display:block;}
+  .badge{
+    margin-left:auto; font-size:0.72rem; padding:3px 9px; border-radius:20px; font-weight:700;
+    display:none; white-space:nowrap;
+  }
+  .qcard.graded .badge{display:inline-block;}
+  .badge.ok{background:rgba(34,197,94,0.18); color:#7be89b;}
+  .badge.no{background:rgba(239,68,68,0.18); color:#f29b9b;}
+  .badge.skip{background:rgba(139,152,165,0.18); color:var(--muted);}
+
+  .submit-bar{
+    position:sticky; bottom:16px; display:flex; justify-content:center; margin-top:24px; z-index:9;
+  }
+  button.submitBtn{
+    background:var(--accent); color:#06121f; border:none; padding:14px 36px; border-radius:12px;
+    font-weight:700; font-size:1rem; cursor:pointer; box-shadow:0 8px 24px rgba(79,157,255,0.35);
+    transition:filter .15s ease;
+  }
+  button.submitBtn:hover{filter:brightness(1.08);}
+  button.submitBtn:disabled{opacity:0.5; cursor:not-allowed;}
+
+  .result-panel{
+    background:var(--card); border:1px solid var(--border); border-radius:16px;
+    padding:26px; text-align:center; margin-bottom:20px; box-shadow:0 8px 30px rgba(0,0,0,0.35);
+  }
+  .result-panel .big{font-size:2.6rem; font-weight:700; color:var(--accent); margin:8px 0;}
+  .result-panel .stats{
+    display:flex; justify-content:center; gap:26px; margin-top:16px; flex-wrap:wrap;
+  }
+  .stat{text-align:center;}
+  .stat .n{font-size:1.3rem; font-weight:700;}
+  .stat .l{font-size:0.75rem; color:var(--muted);}
+  .stat.ok .n{color:var(--accent2);}
+  .stat.no .n{color:var(--bad);}
+  .stat.skip .n{color:var(--muted);}
+  .restart{
+    margin-top:20px; background:var(--accent); color:#06121f; border:none; padding:12px 28px;
+    border-radius:10px; font-weight:600; cursor:pointer; font-size:0.95rem;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="title">
+      <h1>Combined Bank — Senior Officer (IT)</h1>
+      <p>Exam held 17.05.2024 (BIBM) · MCQ Set · 36 of 37 Questions</p>
+    </div>
+    <div class="timer"><div class="dot" id="timerDot"></div><span id="timerDisplay">00:00</span></div>
+  </header>
+
+  <div class="progress-summary" id="progressSummary">0 of 36 answered</div>
+  <div class="marking-note">Marking scheme: +1 for each correct answer, −0.25 for each incorrect answer, 0 for skipped</div>
+
+  <div id="resultPanel"></div>
+  <div id="quizList"></div>
+
+  <div class="submit-bar" id="submitBar">
+    <button class="submitBtn" id="submitBtn">Submit Quiz</button>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+{q:"Expansion of FTP is ___", options:["Fine Transfer Protocol","File Transfer Protocol","First Transfer Protocol","Fast Transfer Protocol"], answer:1,
+ note:"FTP (File Transfer Protocol) is an application-layer protocol used to share files between a server and a client. It uses two ports: port 20 for data and port 21 for control."},
+
+{q:"How long is an IPv6 address?", options:["32 bits","128 bits","64 bits","132 bits"], answer:1,
+ note:"IPv6 was designed with a 128-bit address space (compared to IPv4's 32 bits) to accommodate a vastly larger number of unique addresses."},
+
+{q:"What does HTTPS stand for?", options:["Hyper Text Transfer Protocol Secure","Hyper Text Transfer Protocol System","Hyper Text Transfer Packet System","Hyper Text Transport Protocol Secure"], answer:0,
+ note:"HTTPS is HTTP layered with SSL/TLS encryption, securing data exchanged between browser and server."},
+
+{q:"Set of rules is called ___", options:["domain","resource locator","hypertext","protocol"], answer:3,
+ note:"A protocol is a set of rules that governs communications between computers on a network."},
+
+{q:"Which of the following is the root tag of the HTML document?", options:["<body>","<head>","<title>","<html>"], answer:3,
+ note:"The <html> tag represents the root of an HTML document — it's the container of all other elements (except the Doctype declaration)."},
+
+{q:"Which is not a valid variable name in PHP?", options:["age","_age","PersonAge","1age"], answer:3,
+ note:"A PHP variable name must start with a letter or an underscore, so '1age' (starting with a digit) is invalid."},
+
+{q:"How to create an unordered list (a list with the list items in bullets) in HTML?", options:["<ul>","<ol>","<li>","<i>"], answer:0,
+ note:"The <ul> tag displays list items in bulleted format. There are four bullet types: disc, circle, square, and none."},
+
+{q:"Which of the following statements about the \"do while\" loop is correct?", options:["The condition is checked before the loop body is executed for the first time.","The loop body is guaranteed to execute at least once.","The loop condition must always be false for the loop to execute.","The \"do while\" loop and \"while\" loop have identical behavior in all cases."], answer:1,
+ note:"In a do-while loop, the body runs once before the condition is ever checked, so it always executes at least once — unlike a while loop, which checks the condition first."},
+
+{q:"Which of the following statements about abstract classes and interfaces in Java is correct?", options:["An abstract class can implement multiple interfaces.","An interface can have concrete methods (methods with a body).","An abstract class cannot have any method implementations.","A class can extend multiple abstract classes."], answer:0,
+ note:"An abstract class in Java can implement multiple interfaces, inheriting the contract of each while still providing some method implementations itself."},
+
+{q:"Which of the following correctly describes the meaning of \"Class\", \"&&\", and \"&\" in Java?", options:["Class is a keyword to define a new class; && is a bitwise AND operator; & is a logical AND operator.","Class is used to create objects; && is a bitwise OR operator; & is a logical OR operator.","Class is used to create objects; && is a logical OR operator; & is a bitwise OR operator.","Class is a keyword to define a new class; && is a logical AND operator; & is a bitwise AND operator."], answer:3,
+ note:"'Class' is a keyword used to define a new class. && is the logical AND operator (short-circuits, evaluating the second operand only if needed). & is the bitwise AND operator (and can also be used as a non-short-circuiting logical AND on booleans)."},
+
+{q:"To start Python from the command prompt, use the command ___", options:["execute python","go python","python","run python"], answer:2,
+ note:"Typing 'python' at the command prompt launches the Python interpreter (assuming it's installed and on the system PATH)."},
+
+{q:"What is Java's machine code?", options:["Java source code is directly executed by the CPU.","Java source code is compiled into platform-specific machine code by the Java compiler.","Java source code is compiled into assembly code, which is then executed by the CPU.","Java source code is compiled into bytecode, which is interpreted or compiled to native machine code by the Java Virtual Machine (JVM)."], answer:3,
+ note:"The Java compiler converts source code into bytecode, a platform-independent intermediate representation. The JVM then interprets this bytecode or compiles it (JIT) into native machine code for execution."},
+
+{q:"Which of the following is commonly used to remotely access a computer system?", options:["HTTP","FTP","SSH","SMTP"], answer:2,
+ note:"SSH (Secure Shell) is a network protocol that provides administrators with a secure, encrypted way to access and manage remote systems."},
+
+{q:"Which of the following protocols is used for receiving e-mails?", options:["SMTP","POP3","HTTP","FTP"], answer:1,
+ note:"POP3 (Post Office Protocol 3) is the most commonly used protocol for retrieving/receiving email over the internet, while SMTP is used for sending it."},
+
+{q:"Which CSS property is used to set the thickness or boldness of the text?", options:["font-size","font-style","font-weight","font-family"], answer:2,
+ note:"The font-weight CSS property controls how thick or bold the characters of the text are (e.g., normal, bold, or numeric values like 400/700)."},
+
+{q:"Which of the following keyboard shortcuts is commonly used to close a tab in most web browsers?", options:["Ctrl + T","Ctrl + W","Ctrl + N","Ctrl + Q"], answer:1,
+ note:"Ctrl+W is the standard shortcut for closing the current tab in most web browsers, including Chrome, Firefox, and Edge."},
+
+{q:"Which normal form is considered adequate for normal relational database design?", options:["2NF","5NF","4NF","3NF"], answer:3,
+ note:"3NF (Third Normal Form) is generally considered sufficient for most practical relational database designs, eliminating the majority of data redundancy without the added complexity of higher normal forms."},
+
+{q:"Linear search is also called ___", options:["Random Search","Sequential search","Perfect search","None"], answer:1,
+ note:"Linear search checks each element one after another in sequence, which is why it's also called sequential search."},
+
+{q:"If a link transmits 4000 frames per second and each slot has 8 bits, the transmission rate of the circuit of this TDM is ___.", options:["64 Kbps","32 Mbps","32 Kbps","64 Mbps"], answer:2,
+ note:"Transmission rate = frame rate × bits per slot = 4000 × 8 = 32,000 bps = 32 Kbps."},
+
+{q:"Who are the Permanent members of the United Nations Security Council?", options:["China, Germany, Russia, United Kingdom, and United States","China, France, Japan, United Kingdom, and United States","China, France, Russia, United Kingdom, and United States","China, France, Russia, Germany, and United States"], answer:2,
+ note:"The five permanent members (P5) of the UN Security Council are China, France, Russia, the United Kingdom, and the United States."},
+
+{q:"Which of the following page replacement algorithms suffers from Belady's anomaly?", options:["FIFO","LRU","Optimal Page Replacement","Both LRU and FIFO"], answer:0,
+ note:"FIFO page replacement can suffer from Belady's anomaly, where increasing the number of page frames can, counter-intuitively, increase the number of page faults."},
+
+{q:"Which one of the following is not a part of the local government in Bangladesh?", options:["Union Parishad","Upazila Parishad","Zila Parishad","National Parliament"], answer:3,
+ note:"The National Parliament (Jatiya Sangsad) is the national legislative body, not part of the local government structure, which includes Union, Upazila, and Zila Parishads."},
+
+{q:"What is the highest temperature ever recorded in Bangladesh?", options:["42.3°C","43.2°C","44.5°C","45.1°C"], answer:3,
+ note:"45.1°C was recorded in Chuadanga, considered the highest temperature ever recorded in Bangladesh."},
+
+{q:"Who is the writer of \"On Liberty\"?", options:["Thomas Hobbes","John Stuart Mill","Jean-Jacques Rousseau","John Locke"], answer:1,
+ note:"John Stuart Mill wrote \"On Liberty\" (1859), an influential essay on individual liberty and the limits of authority over the individual."},
+
+{q:"Who received the Ekushey Padak 2024 in Social Service in Bangladesh?", options:["Md Ziaul Haque and Rafique Ahmed","Jalal Uddin Khan and Kalyani Ghosh","Muhammad Samad and Lutfor Rahman Riton","Shibli Mohammad and Dolly Johur"], answer:0},
+
+{q:"How many members does NATO have?", options:["40","32","30","35"], answer:1,
+ note:"NATO has 32 member states as of 2024, following the accession of Finland and Sweden."},
+
+{q:"What is Bangladesh's ranking as a remittance recipient globally?", options:["5th","7th","8th","10th"], answer:2,
+ note:"Bangladesh ranks among the top remittance-recipient countries globally, at roughly 8th place."},
+
+{q:"Who has won the most gold medals at a single Olympics?", options:["Michael Phelps","Usain Bolt","Simone Biles","Larisa Latynina"], answer:0,
+ note:"Michael Phelps won 8 gold medals at the 2008 Beijing Olympics, the most gold medals won by any athlete at a single Games."},
+
+{q:"What does \"Epistemology\" mean?", options:["Epistemology is the branch of philosophy concerned with knowledge.","The study of the nature and scope of knowledge.","The study of human behavior and cognition.","The study of moral principles and values."], answer:0,
+ note:"Epistemology is defined as the branch of philosophy that deals with knowledge — its nature, sources, and limits."},
+
+{q:"বঙ্কিমচন্দ্রের জন্ম ও মৃত্যু সাল কত?", options:["৭ জুন ১৭৩৮ - ৮ এপ্রিল ১৮৯৪","৭ জুন ১৮৩৮ - ৮ এপ্রিল ১৮৯৪","১৫ জুন ১৮৩৮ - ১৫ এপ্রিল ১৮৯৪","৭ জুন ১৮৪৮ - ৮ এপ্রিল ১৮৯৮"], answer:1,
+ note:"বঙ্কিমচন্দ্র চট্টোপাধ্যায়ের জন্ম ৭ জুন ১৮৩৮ এবং মৃত্যু ৮ এপ্রিল ১৮৯৪ সালে।"},
+
+{q:"তন্ময় এর সন্ধি বিচ্ছেদ কি?", options:["তদ + ময়","তন + অময়","ত + ন্ময়","তম্য + অয়"], answer:0,
+ note:"'তন্ময়' শব্দটির সন্ধি বিচ্ছেদ হলো তদ + ময়।"},
+
+{q:"'বিভাবরী' অর্থ?", options:["আলোকভ্রাতা","নদী","নারী","রাত্রি"], answer:3,
+ note:"'বিভাবরী' শব্দের অর্থ রাত্রি (রাত)।"},
+
+{q:"উৎকর্ষতা কি কারণে অশুদ্ধ?", options:["সন্ধিজনিত","প্রত্যয়জনিত","উপসর্গজনিত","বিভক্তিজনিত"], answer:1,
+ note:"'উৎকর্ষতা' শব্দটি প্রত্যয়জনিত কারণে অশুদ্ধ, কারণ 'উৎকর্ষ' শব্দে ইতিমধ্যেই ভাববাচক অর্থ থাকা সত্ত্বেও অতিরিক্ত 'তা' প্রত্যয় যুক্ত হয়েছে।"},
+
+{q:"সকলে কবি নন, কেউ কেউ কবি - উক্তিটি কার?", options:["বুদ্ধদেব বসু","কাজী নজরুল ইসলাম","অমিয় চক্রবর্তী","জীবনানন্দ দাস"], answer:3,
+ note:"'সকলে কবি নন, কেউ কেউ কবি' উক্তিটি কবি জীবনানন্দ দাসের।"},
+
+{q:"What is the antonym of 'transparent'?", options:["Transform","Lubricant","Pure","Hazy"], answer:3,
+ note:"'Transparent' (স্বচ্ছ) means clear or easy to see through; its antonym is 'hazy', meaning unclear or obscured."},
+
+{q:"1²+2²+3²+...+7² ধারাটির সমষ্টি কত?", options:["n(n+1)/2","{n(n+1)/2}²","n(n+1)(n+2)/6","n(n+1)(2n+1)/6"], answer:3,
+ note:"The sum of squares of the first n natural numbers is given by the formula n(n+1)(2n+1)/6."},
+];
+
+const CORRECT_MARKS = 1;
+const NEGATIVE_MARKS = 0.25;
+
+const userAnswers = new Array(QUESTIONS.length).fill(null);
+let submitted = false;
+let seconds = 0;
+let timerInterval = null;
+
+function formatTime(s){
+  const m = Math.floor(s/60).toString().padStart(2,'0');
+  const sec = (s%60).toString().padStart(2,'0');
+  return `${m}:${sec}`;
+}
+
+function startTimer(){
+  timerInterval = setInterval(() => {
+    seconds++;
+    document.getElementById('timerDisplay').textContent = formatTime(seconds);
+  }, 1000);
+}
+
+function stopTimer(){
+  clearInterval(timerInterval);
+  document.getElementById('timerDot').style.background = 'var(--muted)';
+  document.getElementById('timerDot').style.animation = 'none';
+}
+
+function updateProgressSummary(){
+  const answered = userAnswers.filter(a => a !== null).length;
+  document.getElementById('progressSummary').textContent = `${answered} of ${QUESTIONS.length} answered`;
+}
+
+function renderQuiz(){
+  const list = document.getElementById('quizList');
+  list.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  QUESTIONS.forEach((item, qi) => {
+    const card = document.createElement('div');
+    card.className = 'qcard';
+    card.id = `q-${qi}`;
+    card.innerHTML = `
+      <div class="qhead">
+        <span class="num">Q${qi+1}.</span>
+        <span class="question">${item.q}</span>
+        <span class="badge" id="badge-${qi}"></span>
+      </div>
+      ${item.code ? `<div class="codeblock">${item.code.replace(/</g,'&lt;')}</div>` : ''}
+      <div class="options" id="opts-${qi}"></div>
+      <div class="note" id="note-${qi}">${item.note || ''}</div>
+    `;
+    const optsDiv = card.querySelector(`#opts-${qi}`);
+    item.options.forEach((opt, oi) => {
+      const btn = document.createElement('div');
+      btn.className = 'opt';
+      btn.dataset.qi = qi;
+      btn.dataset.oi = oi;
+      btn.innerHTML = `<span class="lbl">${letters[oi]}</span><span>${opt}</span>`;
+      btn.onclick = () => selectOption(qi, oi);
+      optsDiv.appendChild(btn);
+    });
+    list.appendChild(card);
+  });
+}
+
+function selectOption(qi, oi){
+  if (submitted) return;
+  userAnswers[qi] = oi;
+  const card = document.getElementById(`q-${qi}`);
+  card.querySelectorAll('.opt').forEach(o => {
+    o.classList.toggle('selected', parseInt(o.dataset.oi) === oi);
+  });
+  updateProgressSummary();
+}
+
+function gradeQuiz(){
+  let correct = 0, wrong = 0, skipped = 0, totalMarks = 0;
+  QUESTIONS.forEach((item, qi) => {
+    const card = document.getElementById(`q-${qi}`);
+    card.classList.add('graded');
+    const userAns = userAnswers[qi];
+    const badge = document.getElementById(`badge-${qi}`);
+    card.querySelectorAll('.opt').forEach(o => {
+      const oi = parseInt(o.dataset.oi);
+      if (oi === item.answer) o.classList.add('correct');
+      else if (oi === userAns) o.classList.add('wrong');
+    });
+    if (userAns === null){
+      skipped++;
+      card.classList.add('skip-card');
+      badge.textContent = '0 · Skipped';
+      badge.className = 'badge skip';
+    } else if (userAns === item.answer){
+      correct++;
+      totalMarks += CORRECT_MARKS;
+      badge.textContent = `+${CORRECT_MARKS} · Correct`;
+      badge.className = 'badge ok';
+    } else {
+      wrong++;
+      totalMarks -= NEGATIVE_MARKS;
+      card.classList.add('wrong-card');
+      badge.textContent = `−${NEGATIVE_MARKS} · Incorrect`;
+      badge.className = 'badge no';
+    }
+  });
+  return {correct, wrong, skipped, totalMarks};
+}
+
+function renderResultPanel({correct, wrong, skipped, totalMarks}){
+  const maxMarks = QUESTIONS.length * CORRECT_MARKS;
+  const pct = Math.round((correct/QUESTIONS.length)*100);
+  const panel = document.getElementById('resultPanel');
+  panel.innerHTML = `
+    <div class="result-panel">
+      <div style="color:var(--muted); font-size:0.85rem;">Combined Bank Senior Officer (IT) — Exam 17.05.2024</div>
+      <div class="big">${totalMarks.toFixed(2)} / ${maxMarks}</div>
+      <div style="color:var(--muted);">${correct} correct out of ${QUESTIONS.length} (${pct}%) · completed in ${formatTime(seconds)}</div>
+      <div class="stats">
+        <div class="stat ok"><div class="n">${correct}</div><div class="l">Correct (+${CORRECT_MARKS} each)</div></div>
+        <div class="stat no"><div class="n">${wrong}</div><div class="l">Incorrect (−${NEGATIVE_MARKS} each)</div></div>
+        <div class="stat skip"><div class="n">${skipped}</div><div class="l">Skipped (0)</div></div>
+      </div>
+      <button class="restart" id="restartBtn">Retake Quiz</button>
+    </div>
+  `;
+  document.getElementById('restartBtn').onclick = resetQuiz;
+}
+
+function resetQuiz(){
+  submitted = false;
+  for (let i=0;i<userAnswers.length;i++) userAnswers[i] = null;
+  seconds = 0;
+  document.getElementById('timerDisplay').textContent = '00:00';
+  document.getElementById('timerDot').style.background = 'var(--accent2)';
+  document.getElementById('timerDot').style.animation = 'pulse 1.4s infinite';
+  document.getElementById('resultPanel').innerHTML = '';
+  document.getElementById('submitBar').style.display = 'flex';
+  document.getElementById('submitBtn').disabled = false;
+  renderQuiz();
+  updateProgressSummary();
+  startTimer();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+document.getElementById('submitBtn').onclick = () => {
+  if (submitted) return;
+  submitted = true;
+  stopTimer();
+  const results = gradeQuiz();
+  renderResultPanel(results);
+  document.getElementById('submitBar').style.display = 'none';
+  window.scrollTo({top:0, behavior:'smooth'});
+};
+
+renderQuiz();
+updateProgressSummary();
+startTimer();
+</script>
+</body>
+</html>
