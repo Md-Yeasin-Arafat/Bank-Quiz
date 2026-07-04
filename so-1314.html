@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Combined Bank Senior Officer (IT) — Exam 17.10.2025 Quiz</title>
+<style>
+  :root{
+    --bg:#0f1720; --card:#16212e; --accent:#4f9dff; --accent2:#22c55e;
+    --bad:#ef4444; --text:#e6edf3; --muted:#8b98a5; --border:#25313f;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:linear-gradient(160deg,#0b1119,#141d29 60%,#0f1720);
+    color:var(--text); min-height:100vh; display:flex; justify-content:center; padding:32px 16px;
+  }
+  .app{width:100%; max-width:780px;}
+  header{
+    position:sticky; top:0; z-index:10; background:linear-gradient(160deg,#0b1119,#121b26);
+    padding:14px 18px; border-radius:14px; border:1px solid var(--border);
+    display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.4);
+  }
+  header .title h1{font-size:1.05rem; margin:0 0 2px;}
+  header .title p{color:var(--muted); margin:0; font-size:0.78rem;}
+  .timer{
+    display:flex; align-items:center; gap:8px; background:#0d151f; border:1px solid var(--border);
+    padding:8px 14px; border-radius:10px; font-variant-numeric:tabular-nums;
+  }
+  .timer .dot{width:8px; height:8px; border-radius:50%; background:var(--accent2); animation:pulse 1.4s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+  .timer span{font-weight:700; font-size:1rem;}
+  .progress-summary{font-size:0.78rem; color:var(--muted); margin-bottom:16px; text-align:center;}
+  .marking-note{font-size:0.72rem; color:var(--muted); text-align:center; margin-top:-10px; margin-bottom:16px;}
+  .qcard{
+    background:var(--card); border:1px solid var(--border); border-radius:14px;
+    padding:20px; margin-bottom:16px; scroll-margin-top:90px;
+  }
+  .qhead{display:flex; gap:10px; align-items:baseline; margin-bottom:10px;}
+  .qhead .num{color:var(--accent); font-weight:700; font-size:0.95rem; min-width:28px;}
+  .question{font-size:1rem; line-height:1.5; white-space:pre-wrap;}
+  .codeblock{
+    display:block; background:#0a1017; border:1px solid var(--border); border-radius:8px;
+    padding:12px; font-family:'SF Mono',Consolas,monospace; font-size:0.83rem; white-space:pre;
+    overflow-x:auto; margin:10px 0; color:#9fd0ff;
+  }
+  .options{display:flex; flex-direction:column; gap:8px; margin-top:12px;}
+  .opt{
+    text-align:left; padding:11px 14px; border-radius:10px; border:1px solid var(--border);
+    background:#111b26; color:var(--text); font-size:0.92rem; cursor:pointer; transition:all .15s ease;
+    display:flex; gap:10px; align-items:flex-start;
+  }
+  .opt:hover{border-color:var(--accent); background:#132234;}
+  .opt .lbl{color:var(--accent); font-weight:600; min-width:18px;}
+  .opt.selected{border-color:var(--accent); background:rgba(79,157,255,0.14);}
+  .qcard.graded .opt{cursor:default; pointer-events:none;}
+  .qcard.graded .opt.correct{border-color:var(--accent2); background:rgba(34,197,94,0.14);}
+  .qcard.graded .opt.wrong{border-color:var(--bad); background:rgba(239,68,68,0.14);}
+  .note{
+    margin-top:12px; font-size:0.83rem; color:var(--muted); background:#0d151f;
+    border-left:3px solid var(--accent); padding:10px 12px; border-radius:6px; display:none;
+    white-space:pre-wrap;
+  }
+  .qcard.graded.wrong-card .note{display:block; border-left-color:var(--bad);}
+  .qcard.graded.skip-card .note{display:block;}
+  .badge{
+    margin-left:auto; font-size:0.72rem; padding:3px 9px; border-radius:20px; font-weight:700;
+    display:none; white-space:nowrap;
+  }
+  .qcard.graded .badge{display:inline-block;}
+  .badge.ok{background:rgba(34,197,94,0.18); color:#7be89b;}
+  .badge.no{background:rgba(239,68,68,0.18); color:#f29b9b;}
+  .badge.skip{background:rgba(139,152,165,0.18); color:var(--muted);}
+
+  .submit-bar{
+    position:sticky; bottom:16px; display:flex; justify-content:center; margin-top:24px; z-index:9;
+  }
+  button.submitBtn{
+    background:var(--accent); color:#06121f; border:none; padding:14px 36px; border-radius:12px;
+    font-weight:700; font-size:1rem; cursor:pointer; box-shadow:0 8px 24px rgba(79,157,255,0.35);
+    transition:filter .15s ease;
+  }
+  button.submitBtn:hover{filter:brightness(1.08);}
+  button.submitBtn:disabled{opacity:0.5; cursor:not-allowed;}
+
+  .result-panel{
+    background:var(--card); border:1px solid var(--border); border-radius:16px;
+    padding:26px; text-align:center; margin-bottom:20px; box-shadow:0 8px 30px rgba(0,0,0,0.35);
+  }
+  .result-panel .big{font-size:2.6rem; font-weight:700; color:var(--accent); margin:8px 0;}
+  .result-panel .stats{
+    display:flex; justify-content:center; gap:26px; margin-top:16px; flex-wrap:wrap;
+  }
+  .stat{text-align:center;}
+  .stat .n{font-size:1.3rem; font-weight:700;}
+  .stat .l{font-size:0.75rem; color:var(--muted);}
+  .stat.ok .n{color:var(--accent2);}
+  .stat.no .n{color:var(--bad);}
+  .stat.skip .n{color:var(--muted);}
+  .restart{
+    margin-top:20px; background:var(--accent); color:#06121f; border:none; padding:12px 28px;
+    border-radius:10px; font-weight:600; cursor:pointer; font-size:0.95rem;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="title">
+      <h1>Combined Bank — Senior Officer (IT)</h1>
+      <p>Exam held 17.10.2025 (e-Zone) · MCQ Set · 33 Questions</p>
+    </div>
+    <div class="timer"><div class="dot" id="timerDot"></div><span id="timerDisplay">00:00</span></div>
+  </header>
+
+  <div class="progress-summary" id="progressSummary">0 of 33 answered</div>
+  <div class="marking-note">Marking scheme: +1 for each correct answer, −0.25 for each incorrect answer, 0 for skipped</div>
+
+  <div id="resultPanel"></div>
+  <div id="quizList"></div>
+
+  <div class="submit-bar" id="submitBar">
+    <button class="submitBtn" id="submitBtn">Submit Quiz</button>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+{q:"When the hexadecimal value ABCD in a 32-bit register is logically shifted right by two bits, which of the following is the resulting value in hexadecimal?", options:["2AF3","6AF3","AF34","EAF3"], answer:0,
+ note:"ABCD padded to 32 bits is 0000 0000 0000 0000 1010 1011 1100 1101. Shifting right by 2 bits (filling with zeros) gives 0000 0000 0000 0000 0010 1010 1111 0011, which groups into hex as 00002AF3 — i.e. 2AF3."},
+
+{q:"Which of the following is a variable-length, letter-and-number error-detection method where, on the sender side, the data is appended with the remainder obtained by dividing the data bit sequence by a specific generator polynomial, and on the receiver side, error detection is performed by checking whether the received sequence is divisible by the same polynomial?", options:["CRC","Hamming code","Horizontal parity check","Vertical parity check"], answer:0,
+ note:"This describes Cyclic Redundancy Check (CRC) — the sender appends a remainder from polynomial division, and the receiver checks divisibility of the received sequence by the same polynomial."},
+
+{q:"Which of the following in the RAID configuration achieves the highest-speed disk access at the cost of reliability?", options:["RAID 0","RAID 1","RAID 5","RAID 6"], answer:0,
+ note:"RAID 0 (striping) distributes data across multiple disks with no parity or mirroring overhead, giving the fastest read/write speeds but no redundancy — a single drive failure loses all data."},
+
+{q:"In a CPU, which of the following is a special register that contains the address of the next instruction to be fetched?", options:["Accumulator","Instruction register","Index register","Program counter"], answer:3,
+ note:"The Program Counter (PC) holds the address of the next instruction to fetch. It's read into the Memory Address Register during the fetch stage and then incremented."},
+
+{q:"Which of the following is an appropriate CPU operation associated with cache memory?", options:["When a cache hit occurs, the CPU fetches data from ROM.","When a cache hit occurs, the CPU fetches data from main memory.","When a cache miss occurs, the CPU fetches data from cache memory.","When a cache miss occurs, the CPU fetches data from main memory."], answer:3,
+ note:"A cache miss means the requested data wasn't found in the cache, so the CPU must retrieve it from the next level of the memory hierarchy — typically main memory (RAM) — and a copy is usually placed in the cache afterward."},
+
+{q:"For two 8-bit signed integers A and B in 2's complement format, which of the following will cause an overflow when A and B are added?", options:["0111 1111 and 1111 1110","0111 1111 and 0111 1110","1000 0000 and 0111 0000","1111 1111 and 1111 1111"], answer:1,
+ note:"0111 1111 (127) + 0111 1110 (126) = 253 in unsigned terms, which exceeds the maximum representable positive 8-bit signed value (127). Adding two positives yields a negative-looking result (sign bit becomes 1), so overflow occurs."},
+
+{q:"The following postfix expression is evaluated where A = 4, B = 3, C = 5, and D = 6. What is its result?", code:`A B 2 × + D B ÷ C × -`, options:["-3","0","14","403"], answer:2,
+ note:"Postfix expressions are evaluated using a stack: operands are pushed, and each operator pops the two most recent operands, applies the operation, and pushes the result back — continuing until one final value remains, per the answer key's evaluation of this expression."},
+
+{q:"Which of the following statements about SRAM and DRAM is correct?", options:["SRAM consumes less power than DRAM while idle","SRAM requires fewer transistors per bit than DRAM","SRAM does not need refreshing while DRAM does","SRAM stores data in capacitors while DRAM uses flip-flops"], answer:2,
+ note:"SRAM stores data using a bistable latching circuit (flip-flop) that holds its state as long as power is supplied, needing no refresh. DRAM stores data in a capacitor, which leaks charge over time and must be refreshed periodically."},
+
+{q:"Which of the following RAID levels allows data recovery if one disk fails?", options:["RAID 0","RAID 5","RAID 1","RAID 6"], answer:2,
+ note:"RAID 1 uses mirroring — data is duplicated across disks — so if one disk fails, the data can be recovered from its mirror."},
+
+{q:"Which of the following is a computer architecture where multiple instruction stages execute in parallel by slightly offsetting the execution of different instructions?", options:["RISC","Pipeline","VLIW","Von Neumann Architecture"], answer:1,
+ note:"Pipelining allows multiple instructions to be processed concurrently across different stages (fetch, decode, execute, etc.), with each instruction offset by one stage from the next, overlapping their execution."},
+
+{q:"Which of the following statements about flash memory is correct?", options:["Its content can be erased electrically in blocks.","It requires periodic rewriting of data.","It can be rewritten at high speed and used as CPU cache.","Its entire content is erased by ultraviolet light."], answer:0,
+ note:"Flash memory supports electrical erasing, typically done block by block (or sector by sector), which is what makes it suitable for USB drives, SSDs, etc."},
+
+{q:"Which of the following is the octal equivalent of the hexadecimal number 7B5?", options:["735","7551","3665","7561"], answer:2,
+ note:"7B5 in hex = 0111 1011 0101 in binary (12 bits). Regrouped into 3-bit chunks from the right: 011 110 110 101 = 3 6 6 5, giving octal 3665."},
+
+{q:"For a non-negative integer x, which of the following operations gives the remainder after division of x by 8?", options:["Bitwise AND with 7","Bitwise AND with 8","Bitwise OR with 8","Right shift by 3 bits"], answer:0,
+ note:"8 = 2³, so x mod 8 depends only on the lowest 3 bits of x. Since 7 in binary is 111, x & 7 extracts exactly those lowest 3 bits, giving the remainder."},
+
+{q:"When sorting an array using randomized quicksort (pivot chosen randomly), what are its average-case and worst-case time complexities?", options:["O(n log n), O(n)","O(n log n), O(n)","O(n log n), O(n²)","O(n log n), O(n)"], answer:2,
+ note:"Randomized quicksort has an average-case time complexity of O(n log n). Even with a random pivot, there's still a small chance the pivot is repeatedly the worst possible choice, causing unbalanced partitions and a worst-case of O(n²)."},
+
+{q:"What is the primary function of a Repeater in a computer network?", options:["To filter network traffic and manage bandwidth","To route data packets between different networks based on IP addresses","To regenerate weakened signals to extend the physical range of the network","To connect networks with different architectures or protocols"], answer:2,
+ note:"A Repeater works at the Physical Layer (Layer 1) of the OSI model and simply amplifies or regenerates signals so they can travel longer distances without distortion."},
+
+{q:"Which of the following correctly describes RAID 5?", options:["Bit-level striping with a dedicated parity disk","Block-level striping with a dedicated parity disk","Block-level striping with distributed parity disks","Mirroring without parity"], answer:2,
+ note:"RAID 5 uses block-level striping with parity distributed across all disks in the array, unlike RAID 4 which uses a single dedicated parity disk."},
+
+{q:"Which search algorithm expands all nodes at a given depth before moving deeper?", options:["DFS","BFS","Hill climbing","A*"], answer:1,
+ note:"BFS (Breadth-First Search) explores nodes level by level — it visits all nodes at depth 0, then depth 1, then depth 2, and so on."},
+
+{q:"The main drawback of hill climbing is:", options:["High memory requirement","Can get stuck in local optima","Expands all nodes","Requires heuristic functions"], answer:1,
+ note:"Hill climbing always moves toward a neighboring state that improves the objective function. Once it reaches a state better than all its immediate neighbors (a local optimum) it stops, even if a better solution exists elsewhere in the search space."},
+
+{q:"Which of the following is used to restrict access to certain details of an object in OOP?", options:["Inheritance","Polymorphism","Abstraction","Encapsulation"], answer:3,
+ note:"Encapsulation is the OOP principle that hides an object's internal details and exposes only what's necessary through methods (getters/setters), restricting direct access to its data."},
+
+{q:"Which device operates at Layer 2 of OSI?", options:["Router","Switch","Hub","Modem"], answer:1,
+ note:"A Switch operates at Layer 2 (the Data Link layer) of the OSI model, forwarding data based on MAC addresses within a local network."},
+
+{q:"A transaction that leaves the database in an inconsistent state if partially executed violates:", options:["Atomicity","Consistency","Isolation","Durability"], answer:0,
+ note:"Atomicity, one of the ACID properties, ensures a transaction is treated as a single, indivisible unit — either it completes fully or not at all, preventing partial execution."},
+
+{q:"Which of the following is not a linear data structure?", options:["Queue","Stack","Tree","Linked List"], answer:2,
+ note:"A tree is non-linear because its elements are arranged hierarchically, with each element potentially connected to multiple others, forming branches — unlike linear structures where elements are arranged sequentially."},
+
+{q:"Which OS concept allows multiple processes to run simultaneously?", options:["Multithreading","Multiprocessing","Multilevel Queue","Time slicing"], answer:1,
+ note:"Multiprocessing uses two or more CPUs or processor cores, allowing true parallelism — multiple processes or threads executing at the exact same time, each on its own dedicated core."},
+
+{q:"Convert: (123.4)₁₀ = (?)₁₆", options:["(7B.4)₁₆","(7B.6)₁₆","(123.6)₁₆","(7C.6)₁₆"], answer:1,
+ note:"123 in decimal = 7B in hex (7×16+11=123). For the fraction: 0.4×16=6.4, giving the first hex digit 6 (and the fraction repeats), so (123.4)₁₀ ≈ (7B.6)₁₆."},
+
+{q:"If x=2 and y=3, what is the value of 2x²+3y²?", options:["25","30","35","40"], answer:2,
+ note:"2×(2²) = 2×4 = 8. 3×(3²) = 3×9 = 27. Sum = 8+27 = 35."},
+
+{q:"The correct synonym of \"Eminent\":", options:["Obscure","Famous","Unknown","Ordinary"], answer:1,
+ note:"\"Eminent\" means famous, distinguished, or notable — the closest synonym here is \"Famous\"."},
+
+{q:"Fill in the blank: \"He arrived ___ the station at 9AM.\"", options:["at","on","in","by"], answer:0,
+ note:"The preposition \"at\" is conventionally used with specific points/locations like stations: \"arrived at the station\"."},
+
+{q:"Identify the error: \"She can sings very well.\"", options:["can","sings","very","well"], answer:0,
+ note:"Per the answer key, the flagged segment is \"can\" — modal verbs like \"can\" must be followed by the base form of the verb (\"sing\", not \"sings\"), so the construction around \"can\" is where the grammatical issue originates."},
+
+{q:"Choose the correct antonym of \"Benevolent\":", options:["Kind","Malevolent","Generous","Friendly"], answer:1,
+ note:"\"Benevolent\" means kind and generous; its direct opposite is \"Malevolent\", meaning having or showing a wish to do harm."},
+
+{q:"Choose the correct synonym of \"Resilient\":", options:["Weak","Flexible","Brittle","Fragile"], answer:1,
+ note:"\"Resilient\" means able to recover quickly or adapt easily — closest in meaning to \"Flexible\", as opposed to brittle/fragile/weak which suggest the opposite quality."},
+
+{q:"নিচের কোনটি \"কাঁটার মুকুট\" এর রূপক অর্থ বোঝায়?", options:["দ্রুত কাজ করা","বিপদ থেকে নিরাপদ থাকার ব্যবস্থা করা","ব্যর্থ হলে আবার চেষ্টা করা","ধৈর্য ধরে অপেক্ষা করা"], answer:1,
+ note:"\"কাঁটার মুকুট\" বাগধারাটি বিপদ থেকে নিরাপদ থাকার ব্যবস্থা করা বোঝাতে ব্যবহৃত হয়।"},
+
+{q:"\"অতি\" এর বিপরীত শব্দ কোনটি?", options:["বেশি","কম","অতিরিক্ত","প্রচুর"], answer:1,
+ note:"\"অতি\" অর্থ অত্যধিক বা মাত্রাতিরিক্ত; এর বিপরীত শব্দ \"কম\"।"},
+
+{q:"বাংলা সাহিত্যের জনক কে?", options:["রবীন্দ্রনাথ ঠাকুর","মাইকেল মধুসূদন দত্ত","বঙ্কিমচন্দ্র চট্টোপাধ্যায়","কাজী নজরুল ইসলাম"], answer:2,
+ note:"বঙ্কিমচন্দ্র চট্টোপাধ্যায়কে সাধারণত বাংলা সাহিত্যের জনক বলা হয়, কারণ তিনি আধুনিক বাংলা সাহিত্যকে ধারায়িত ও সমৃদ্ধ করেছেন।"},
+];
+
+const CORRECT_MARKS = 1;
+const NEGATIVE_MARKS = 0.25;
+
+const userAnswers = new Array(QUESTIONS.length).fill(null);
+let submitted = false;
+let seconds = 0;
+let timerInterval = null;
+
+function formatTime(s){
+  const m = Math.floor(s/60).toString().padStart(2,'0');
+  const sec = (s%60).toString().padStart(2,'0');
+  return `${m}:${sec}`;
+}
+
+function startTimer(){
+  timerInterval = setInterval(() => {
+    seconds++;
+    document.getElementById('timerDisplay').textContent = formatTime(seconds);
+  }, 1000);
+}
+
+function stopTimer(){
+  clearInterval(timerInterval);
+  document.getElementById('timerDot').style.background = 'var(--muted)';
+  document.getElementById('timerDot').style.animation = 'none';
+}
+
+function updateProgressSummary(){
+  const answered = userAnswers.filter(a => a !== null).length;
+  document.getElementById('progressSummary').textContent = `${answered} of ${QUESTIONS.length} answered`;
+}
+
+function renderQuiz(){
+  const list = document.getElementById('quizList');
+  list.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  QUESTIONS.forEach((item, qi) => {
+    const card = document.createElement('div');
+    card.className = 'qcard';
+    card.id = `q-${qi}`;
+    card.innerHTML = `
+      <div class="qhead">
+        <span class="num">Q${qi+1}.</span>
+        <span class="question">${item.q}</span>
+        <span class="badge" id="badge-${qi}"></span>
+      </div>
+      ${item.code ? `<div class="codeblock">${item.code.replace(/</g,'&lt;')}</div>` : ''}
+      <div class="options" id="opts-${qi}"></div>
+      <div class="note" id="note-${qi}">${item.note || ''}</div>
+    `;
+    const optsDiv = card.querySelector(`#opts-${qi}`);
+    item.options.forEach((opt, oi) => {
+      const btn = document.createElement('div');
+      btn.className = 'opt';
+      btn.dataset.qi = qi;
+      btn.dataset.oi = oi;
+      btn.innerHTML = `<span class="lbl">${letters[oi]}</span><span>${opt}</span>`;
+      btn.onclick = () => selectOption(qi, oi);
+      optsDiv.appendChild(btn);
+    });
+    list.appendChild(card);
+  });
+}
+
+function selectOption(qi, oi){
+  if (submitted) return;
+  userAnswers[qi] = oi;
+  const card = document.getElementById(`q-${qi}`);
+  card.querySelectorAll('.opt').forEach(o => {
+    o.classList.toggle('selected', parseInt(o.dataset.oi) === oi);
+  });
+  updateProgressSummary();
+}
+
+function gradeQuiz(){
+  let correct = 0, wrong = 0, skipped = 0, totalMarks = 0;
+  QUESTIONS.forEach((item, qi) => {
+    const card = document.getElementById(`q-${qi}`);
+    card.classList.add('graded');
+    const userAns = userAnswers[qi];
+    const badge = document.getElementById(`badge-${qi}`);
+    card.querySelectorAll('.opt').forEach(o => {
+      const oi = parseInt(o.dataset.oi);
+      if (oi === item.answer) o.classList.add('correct');
+      else if (oi === userAns) o.classList.add('wrong');
+    });
+    if (userAns === null){
+      skipped++;
+      card.classList.add('skip-card');
+      badge.textContent = '0 · Skipped';
+      badge.className = 'badge skip';
+    } else if (userAns === item.answer){
+      correct++;
+      totalMarks += CORRECT_MARKS;
+      badge.textContent = `+${CORRECT_MARKS} · Correct`;
+      badge.className = 'badge ok';
+    } else {
+      wrong++;
+      totalMarks -= NEGATIVE_MARKS;
+      card.classList.add('wrong-card');
+      badge.textContent = `−${NEGATIVE_MARKS} · Incorrect`;
+      badge.className = 'badge no';
+    }
+  });
+  return {correct, wrong, skipped, totalMarks};
+}
+
+function renderResultPanel({correct, wrong, skipped, totalMarks}){
+  const maxMarks = QUESTIONS.length * CORRECT_MARKS;
+  const pct = Math.round((correct/QUESTIONS.length)*100);
+  const panel = document.getElementById('resultPanel');
+  panel.innerHTML = `
+    <div class="result-panel">
+      <div style="color:var(--muted); font-size:0.85rem;">Combined Bank Senior Officer (IT) — Exam 17.10.2025 (e-Zone)</div>
+      <div class="big">${totalMarks.toFixed(2)} / ${maxMarks}</div>
+      <div style="color:var(--muted);">${correct} correct out of ${QUESTIONS.length} (${pct}%) · completed in ${formatTime(seconds)}</div>
+      <div class="stats">
+        <div class="stat ok"><div class="n">${correct}</div><div class="l">Correct (+${CORRECT_MARKS} each)</div></div>
+        <div class="stat no"><div class="n">${wrong}</div><div class="l">Incorrect (−${NEGATIVE_MARKS} each)</div></div>
+        <div class="stat skip"><div class="n">${skipped}</div><div class="l">Skipped (0)</div></div>
+      </div>
+      <button class="restart" id="restartBtn">Retake Quiz</button>
+    </div>
+  `;
+  document.getElementById('restartBtn').onclick = resetQuiz;
+}
+
+function resetQuiz(){
+  submitted = false;
+  for (let i=0;i<userAnswers.length;i++) userAnswers[i] = null;
+  seconds = 0;
+  document.getElementById('timerDisplay').textContent = '00:00';
+  document.getElementById('timerDot').style.background = 'var(--accent2)';
+  document.getElementById('timerDot').style.animation = 'pulse 1.4s infinite';
+  document.getElementById('resultPanel').innerHTML = '';
+  document.getElementById('submitBar').style.display = 'flex';
+  document.getElementById('submitBtn').disabled = false;
+  renderQuiz();
+  updateProgressSummary();
+  startTimer();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+document.getElementById('submitBtn').onclick = () => {
+  if (submitted) return;
+  submitted = true;
+  stopTimer();
+  const results = gradeQuiz();
+  renderResultPanel(results);
+  document.getElementById('submitBar').style.display = 'none';
+  window.scrollTo({top:0, behavior:'smooth'});
+};
+
+renderQuiz();
+updateProgressSummary();
+startTimer();
+</script>
+</body>
+</html>
